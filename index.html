@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialMani AI - Edytor Zdjęć Manicure</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 SocialMani AI</h1>
+            <p>Przekształć zdjęcie manicure w profesjonalną fotografię produktową</p>
+        </header>
+
+        <div class="config-section">
+            <div class="api-key-input">
+                <label for="apiKey">Klucz API Google AI Studio:</label>
+                <input type="password" id="apiKey" placeholder="Wprowadź swój klucz API">
+                <small>Pobierz klucz z <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></small>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p>Przeciągnij zdjęcie tutaj lub kliknij aby wybrać</p>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+        </div>
+
+        <div class="options-section" id="optionsSection" style="display: none;">
+            <h3>Opcje przetwarzania:</h3>
+            <div class="options-grid">
+                <label>
+                    <input type="radio" name="style" value="professional" checked>
+                    <span>Profesjonalne studio</span>
+                </label>
+                <label>
+                    <input type="radio" name="style" value="glamour">
+                    <span>Glamour z brokatem</span>
+                </label>
+                <label>
+                    <input type="radio" name="style" value="minimal">
+                    <span>Minimalistyczne</span>
+                </label>
+                <label>
+                    <input type="radio" name="style" value="artistic">
+                    <span>Artystyczne</span>
+                </label>
+            </div>
+            <button id="processBtn" class="process-btn">✨ Przetwórz zdjęcie</button>
+        </div>
+
+        <div class="results-section" id="resultsSection" style="display: none;">
+            <div class="image-comparison">
+                <div class="image-box">
+                    <h3>Oryginał</h3>
+                    <img id="originalImage" alt="Oryginalne zdjęcie">
+                </div>
+                <div class="arrow">→</div>
+                <div class="image-box">
+                    <h3>Po przetworzeniu</h3>
+                    <div id="processedImageContainer">
+                        <div class="loader" id="loader">
+                            <div class="spinner"></div>
+                            <p>Przetwarzanie przez AI...</p>
+                        </div>
+                        <img id="processedImage" alt="Przetworzone zdjęcie" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            <button id="downloadBtn" class="download-btn" style="display: none;">
+                💾 Pobierz przetworzone zdjęcie
+            </button>
+            <button id="newPhotoBtn" class="new-photo-btn">
+                📸 Prześlij nowe zdjęcie
+            </button>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
