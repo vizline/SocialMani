@@ -121,65 +121,70 @@ class ManicureEditor {
         try {
             // Przygotowanie promptu na podstawie wybranego stylu
             const prompts = {
-                professional: `Przekształć to zdjęcie manicure w profesjonalną fotografię produktową:
-                    1. Usuń całkowicie tło
-                    2. Dodaj gradient tła od jasnoszarego do białego
-                    3. Dodaj profesjonalne oświetlenie studyjne typu softbox
-                    4. Popraw ostrość i szczegóły paznokci
-                    5. Zwiększ nasycenie koloru lakieru
-                    6. Usuń wszystkie niedoskonałości skóry
-                    7. Dodaj subtelny cień pod dłonią`,
+                professional: `Using the provided manicure photo, transform it into a professional product photograph:
+                    1. Remove the background completely and replace with a clean gradient from light gray to white
+                    2. Add professional studio softbox lighting
+                    3. Enhance nail sharpness and details
+                    4. Increase nail polish color saturation
+                    5. Remove any skin imperfections while keeping it natural
+                    6. Add subtle shadow under the hand
+                    7. Make it look like high-end beauty product photography`,
                 
-                glamour: `Przekształć to zdjęcie manicure w glamour shot:
-                    1. Usuń tło i zastąp błyszczącym, rozmytym bokeh w odcieniach różu i złota
-                    2. Dodaj delikatne cząsteczki brokatu wokół paznokci
-                    3. Zwiększ blask i połysk lakieru
-                    4. Dodaj ciepłe, złote oświetlenie
-                    5. Wygładź skórę zachowując naturalność
-                    6. Podkreśl kontury paznokci`,
+                glamour: `Using this manicure photo, create a glamour beauty shot:
+                    1. Replace background with sparkling bokeh in pink and gold tones
+                    2. Add subtle glitter particles around the nails
+                    3. Increase nail polish shine and glossiness
+                    4. Add warm, golden lighting
+                    5. Smooth skin while maintaining natural texture
+                    6. Enhance nail contours
+                    7. Make it look luxurious and glamorous`,
                 
-                minimal: `Stwórz minimalistyczną wersję zdjęcia manicure:
-                    1. Usuń tło i zastąp czystym białym
-                    2. Zastosuj wysokie oświetlenie high-key
-                    3. Usuń wszystkie rozpraszające elementy
-                    4. Zachowaj czystą, prostą kompozycję
-                    5. Lekko rozjaśnij całość
-                    6. Wyostrz krawędzie paznokci`,
+                minimal: `Transform this manicure photo into minimalist style:
+                    1. Replace background with pure white
+                    2. Apply high-key bright lighting
+                    3. Remove all distracting elements
+                    4. Keep clean, simple composition
+                    5. Slightly brighten overall image
+                    6. Sharpen nail edges
+                    7. Create a modern, minimalist aesthetic`,
                 
-                artistic: `Przekształć zdjęcie manicure w artystyczną fotografię:
-                    1. Dodaj kreatywne, kolorowe tło z abstrakcyjnymi kształtami
-                    2. Zastosuj interesujące oświetlenie z kolorowymi refleksami
-                    3. Zwiększ kontrast i saturację
-                    4. Dodaj artystyczny efekt rozmycia w wybranych miejscach
-                    5. Podkreśl unikalność designu paznokci`
+                artistic: `Transform this manicure photo into an artistic beauty photograph:
+                    1. Add creative, colorful abstract background
+                    2. Apply interesting lighting with color reflections
+                    3. Increase contrast and saturation
+                    4. Add artistic blur in selected areas
+                    5. Emphasize the unique nail design
+                    6. Make it visually striking and creative`
             };
 
             // Użycie modelu Gemini do generowania obrazu
             const model = this.genAI.getGenerativeModel({ 
-                model: "gemini-2.0-flash-exp",
-                generationConfig: {
-                    responseMimeType: "image/png"
-                }
+                model: "gemini-2.5-flash-image" // Poprawna nazwa modelu!
             });
 
-            const result = await model.generateContent([
-                prompts[style],
+            // Struktura promptu zgodna z przykładem
+            const prompt = [
                 {
                     inlineData: {
                         mimeType: this.currentImage.mimeType,
                         data: this.currentImage.base64
                     }
-                }
-            ]);
+                },
+                { text: prompts[style] }
+            ];
 
+            const result = await model.generateContent(prompt);
             const response = await result.response;
             
-            // Sprawdzenie czy odpowiedź zawiera obraz
+            // Sprawdzenie odpowiedzi
             if (response.candidates && response.candidates[0]) {
                 const parts = response.candidates[0].content.parts;
                 
                 for (const part of parts) {
-                    if (part.inlineData) {
+                    if (part.text) {
+                        console.log('Otrzymano tekst:', part.text);
+                    } else if (part.inlineData) {
+                        // Znaleziono wygenerowany obraz!
                         const imageData = part.inlineData.data;
                         const imageMimeType = part.inlineData.mimeType || 'image/png';
                         
@@ -198,6 +203,12 @@ class ManicureEditor {
                         this.showMessage('Zdjęcie przetworzone pomyślnie!', 'success');
                         break;
                     }
+                }
+
+                // Jeśli nie znaleziono obrazu w odpowiedzi
+                if (!this.processedImageData) {
+                    this.showMessage('Model nie zwrócił przetworzonego obrazu. Spróbuj ponownie.', 'error');
+                    this.elements.loader.style.display = 'none';
                 }
             }
         } catch (error) {
