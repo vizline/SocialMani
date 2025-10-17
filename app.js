@@ -121,40 +121,42 @@ class ManicureEditor {
         try {
             // Przygotowanie promptu na podstawie wybranego stylu
             const prompts = {
-                professional: `Using the provided manicure photo, transform it into a professional product photograph:
-                    1. Remove the background completely and replace with a clean gradient from light gray to white
-                    2. Add professional studio softbox lighting
-                    3. Enhance nail sharpness and details
-                    4. Increase nail polish color saturation
-                    5. Remove any skin imperfections while keeping it natural
-                    6. Add subtle shadow under the hand
-                    7. Make it look like high-end beauty product photography`,
+                // =============== MODIFIED PROMPT ===============
+                professional: `Using the provided manicure photo, transform it into a glamorous packshot:
+                        1. Do NOT change the shape or add polish to the nails. Just enhance their natural color, vibrance, and sharpness.
+                        2. Make the skin on the hand perfectly smooth, without any visible defects.
+                        3. Make the skin's color warmer and more intensive.
+                        4. Apply a significant blur to the hand and skin, making the nails the only sharp focal point.
+                        5. Replace the background with a very soft, plush, white towel to give a sense of warmth and professional care.
+                        6. Add professional studio lighting to the entire scene.
+                        7. The final result should be a glamorous, high-end "packshot" of the manicure.`,
+                // ===============================================
                 
                 glamour: `Using this manicure photo, create a glamour beauty shot:
-                    1. Replace background with sparkling bokeh in pink and gold tones
-                    2. Add subtle glitter particles around the nails
-                    3. Increase nail polish shine and glossiness
-                    4. Add warm, golden lighting
-                    5. Smooth skin while maintaining natural texture
-                    6. Enhance nail contours
-                    7. Make it look luxurious and glamorous`,
+                        1. Replace background with sparkling bokeh in pink and gold tones
+                        2. Add subtle glitter particles around the nails
+                        3. Increase nail polish shine and glossiness
+                        4. Add warm, golden lighting
+                        5. Smooth skin while maintaining natural texture
+                        6. Enhance nail contours
+                        7. Make it look luxurious and glamorous`,
                 
                 minimal: `Transform this manicure photo into minimalist style:
-                    1. Replace background with pure white
-                    2. Apply high-key bright lighting
-                    3. Remove all distracting elements
-                    4. Keep clean, simple composition
-                    5. Slightly brighten overall image
-                    6. Sharpen nail edges
-                    7. Create a modern, minimalist aesthetic`,
+                        1. Replace background with pure white
+                        2. Apply high-key bright lighting
+                        3. Remove all distracting elements
+                        4. Keep clean, simple composition
+                        5. Slightly brighten overall image
+                        6. Sharpen nail edges
+                        7. Create a modern, minimalist aesthetic`,
                 
                 artistic: `Transform this manicure photo into an artistic beauty photograph:
-                    1. Add creative, colorful abstract background
-                    2. Apply interesting lighting with color reflections
-                    3. Increase contrast and saturation
-                    4. Add artistic blur in selected areas
-                    5. Emphasize the unique nail design
-                    6. Make it visually striking and creative`
+                        1. Add creative, colorful abstract background
+                        2. Apply interesting lighting with color reflections
+                        3. Increase contrast and saturation
+                        4. Add artistic blur in selected areas
+                        5. Emphasize the unique nail design
+                        6. Make it visually striking and creative`
             };
 
             // Użycie modelu Gemini do generowania obrazu
